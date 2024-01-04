@@ -8,7 +8,7 @@ def pascal_triangle(n):
     # Returns an empty list if n is lessthaan or equal to 0
     if n <= 0:
         return []
-    
+
     triangle = [[1]]
 
     # generate values for the new row from the previous one
