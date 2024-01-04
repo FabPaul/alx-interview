@@ -8,21 +8,22 @@ def pascal_triangle(n):
     # Returns an empty list if n is lessthaan or equal to 0
     if n <= 0:
         return []
+    
+    triangle = [[1]]
 
-    triangle = []
+    # generate values for the new row from the previous one
+    for row in range(1, n):
+        prev_row = triangle[row - 1]
+        new_row = [1]
 
-    # Generate the rows of the triangle
-    for i in range(n):
-        row = [1]
+        for column in range(1, row):
+            value = prev_row[column - 1] + prev_row[column]
+            new_row.append(value)
 
-        # Now the columns
-        for j in range(1, i):
-            row.append(triangle[i-1][j-1] + triangle[i-1][j])
+        # Add the last element to the new row
+        new_row.append(1)
 
-        # Each row must end with 1
-        if i > 0:
-            row.append(1)
-
-        triangle.append(row)
+        # Add the mew row to the Pascal's triangle
+        triangle.append(new_row)
 
     return triangle
