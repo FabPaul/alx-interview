@@ -1,0 +1,1 @@
+Solutions to Minimum Operations task
