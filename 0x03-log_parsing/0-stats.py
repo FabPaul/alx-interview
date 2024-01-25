@@ -1,42 +1,58 @@
 #!/usr/bin/python3
-""" Log parsin script that reads stdin line by line and computes metrics"""
+"""Log parsing script that reads stdin line by line and computes metrics"""
 
 import sys
 
-status = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
-          '404': 0, '405': 0, '500': 0}
 
-total_size = 0
-count = 0
+def initialize_stats():
+    """Initialize statistics"""
+    results = {"200": 0, "301": 0, "400": 0,
+               "401": 0, "403": 0, "404": 0, "405": 0, "500": 0}
 
-try:
-    for line in sys.stdin:
-        line_list = line.split(" ")
+    return results
 
-        if len(line_list) > 4:
-            code = line_list[-2]
-            file_size = int(line_list[-1])
 
-            if code in status.keys():
-                status[code] += 1
+def process_lines(line, stats, total_size, line_count):
+    """Process a single log line and update statistics"""
+    try:
+        parts = line.split()
+        status_code = parts[-2]
+        file_size = int(parts[-1])
 
-            total_size += file_size
+        if status_code in stats:
+            stats[status_code] += 1
 
-            count += 1
+        total_size += file_size
+        line_count += 1
 
-        if count == 10:
-            count = 0
-            print(f'File size: {total_size}')
+        if line_count % 10 == 0:
+            print_stats(stats, total_size)
 
-            for key, value in sorted(status.items()):
-                if value != 0:
-                    print(f'{key}: {value}')
+    except (IndexError, ValueError):
+        pass
 
-except Exception as err:
-    pass
+    return total_size, line_count
 
-finally:
-    print(f'File size: {total_size}')
-    for key, value in sorted(status.items()):
-        if value != 0:
-            print(f'{key}: {value}')
+
+def print_stats(stats, total_size):
+    """Print statistics"""
+    print(f"File size: {total_size}")
+    for code, count in sorted(stats.items()):
+        if count:
+            print(f"{code}: {count}")
+
+
+if __name__ == "__main__":
+    total_size, line_count = 0, 0
+    statistics = initialize_stats()
+
+    try:
+        for line in sys.stdin:
+            total_size, line_count = process_lines(line.strip(), statistics,
+                                                   total_size, line_count)
+
+        print_stats(statistics, total_size)
+
+    except KeyboardInterrupt:
+        print_stats(statistics, total_size)
+        raise
