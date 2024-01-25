@@ -3,39 +3,40 @@
 
 import sys
 
+status = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
+          '404': 0, '405': 0, '500': 0}
 
-if __name__ == '__main__':
-    total_size, line_count = 0, 0
-    codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
-    stats = {code: 0 for code in codes}
+total_size = 0
+count = 0
 
-    def print_stats(stats: dict, total_size: int) -> None:
-        """Print statistics"""
-        print(f"File size: {total_size}")
-        for code, count in sorted(stats.items()):
-            if count:
-                print(f"{code}: {count}")
+try:
+    for line in sys.stdin:
+        line_list = line.split(" ")
 
-    try:
-        for line in sys.stdin:
-            line_count += 1
-            data = line.split()
+        if len(line_list) > 4:
+            code = line_list[-2]
+            file_size = int(line_list[-1])
 
-            try:
-                status_code = data[-2]
-                if status_code in stats:
-                    stats[status_code] += 1
-            except (IndexError, ValueError):
-                pass
+            if code in status.keys():
+                status[code] += 1
 
-            try:
-                total_size += int(data[-1])
-            except (IndexError, ValueError):
-                pass
+            total_size += file_size
 
-            if line_count % 10 == 0:
-                print_stats(stats, total_size)
-        print_stats(stats, total_size)
-    except KeyboardInterrupt:
-        print_stats(stats, total_size)
-        raise
+            count += 1
+
+        if count == 10:
+            count = 0
+            print(f'File size: {total_size}')
+
+            for key, value in sorted(status.items()):
+                if value != 0:
+                    print(f'{key}: {value}')
+
+except Exception as err:
+    pass
+
+finally:
+    print(f'File size: {total_size}')
+    for key, value in sorted(status.items()):
+        if value != 0:
+            print(f'{key}: {value}')
