@@ -49,7 +49,7 @@ if __name__ == "__main__":
             total_size, line_count = process_lines(line.strip(),
                                                    statistics, total_size, line_count)
             
-            print_stats(statistics, total_size)
+        print_stats(statistics, total_size)
 
     except KeyboardInterrupt:
         print_stats(statistics, total_size)
