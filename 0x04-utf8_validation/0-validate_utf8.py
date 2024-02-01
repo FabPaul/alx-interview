@@ -24,9 +24,7 @@ def validUTF8(data):
                 return False
 
         else:
-            if (byte & bitmask_1 and not (byte & bitmask_2)):
-                return True
-            else:
+            if not (byte & bitmask_1 and not (byte & bitmask_2)):
                 return False
 
         current_bytes_number -= 1
