@@ -1,4 +1,4 @@
-#!/user/bin/python3
+#!/usr/bin/python3
 
 """
 Given a pile of coins of different values, determine the fewest number
