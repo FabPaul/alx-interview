@@ -21,16 +21,17 @@ def isWinner(x, nums):
                 choices.pop(i)
                 continue
             for j in range(2, num):
-                div = num
-                choices.pop(i)
-                k = 0
-                while k < len(choices):
-                    if choices[k] % div == 0:
-                        choices.pop(k)
-                    k += 1
-                turn += 1
-                i = 0
-                break
+                if num % j == 0:
+                    a = num
+                    choices.pop(i)
+                    k = 0
+                    while k < len(choices):
+                        if choices[k] % a == 0:
+                            choices.pop(k)
+                        k += 1
+                    turn += 1
+                    i = 0
+                    break
             i += 1
         if turn == 1:
             ben_wins += 1
