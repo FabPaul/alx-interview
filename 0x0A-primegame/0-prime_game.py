@@ -4,13 +4,37 @@
 
 def isWinner(x, nums):
     """Checks who the winner is"""
+    if x > len(nums):
+        return None
+
     maria_wins = 0
     ben_wins = 0
 
-    for n in nums:
-        if n == 1:
+    for rounds in range(x):
+        turn = 1
+        choices = [n + 1 for n in range(nums[rounds])]
+        i = 1
+
+        while i < len(choices):
+            num = choices[i]
+            if num == 1:
+                choices.pop(i)
+                continue
+            for j in range(2, num):
+                div = num
+                choices.pop(i)
+                k = 0
+                while k < len(choices):
+                    if choices[k] % div == 0:
+                        choices.pop(k)
+                    k += 1
+                turn += 1
+                i = 0
+                break
+            i += 1
+        if turn == 1:
             ben_wins += 1
-        elif n % 2 == 0:
+        elif turn % 2 == 0:
             ben_wins += 1
         else:
             maria_wins += 1
