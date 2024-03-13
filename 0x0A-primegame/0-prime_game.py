@@ -2,6 +2,16 @@
 """Prime game"""
 
 
+def is_prime(num):
+    """Checks for prime number"""
+    if num == 1:
+        return False
+    for i in range(2, num):
+        if num % i == 0:
+            return False
+    return True
+
+
 def isWinner(x, nums):
     """Checks who the winner is"""
     if x > len(nums):
@@ -17,21 +27,16 @@ def isWinner(x, nums):
 
         while i < len(choices):
             num = choices[i]
-            if num == 1:
+            if is_prime(num):
+                a = num
                 choices.pop(i)
-                continue
-            for j in range(2, num):
-                if num % j == 0:
-                    a = num
-                    choices.pop(i)
-                    k = 0
-                    while k < len(choices):
-                        if choices[k] % a == 0:
-                            choices.pop(k)
-                        k += 1
-                    turn += 1
-                    i = 0
-                    break
+                k = 0
+                while k < len(choices):
+                    if choices[k] % a == 0:
+                        choices.pop(k)
+                    k += 1
+                turn += 1
+                i = 0
             i += 1
         if turn == 1:
             ben_wins += 1
