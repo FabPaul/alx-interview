@@ -3,10 +3,10 @@
 
 
 def is_prime(num):
-    """Checks for prime number"""
-    if num == 1:
+    """Checks for prime numbers"""
+    if num < 2:
         return False
-    for i in range(2, num):
+    for i in range(2, int(num**0.5) + 1):
         if num % i == 0:
             return False
     return True
@@ -14,40 +14,24 @@ def is_prime(num):
 
 def isWinner(x, nums):
     """Checks who the winner is"""
-    if x > len(nums):
+    if not nums or x < 1:
         return None
 
-    maria_wins = 0
-    ben_wins = 0
+    max_value = max(nums)
+    prime_flags = [is_prime(i) for i in range(max(max_value + 1, 2))]
 
-    for rounds in range(x):
-        turn = 1
-        choices = [n + 1 for n in range(nums[rounds])]
-        i = 1
+    cumulative_primes = 0
+    for i in range(len(prime_flags)):
+        if prime_flags[i]:
+            cumulative_primes += 1
+        prime_flags[i] = cumulative_primes
 
-        while i < len(choices):
-            num = choices[i]
-            if is_prime(num):
-                a = num
-                choices.pop(i)
-                k = 0
-                while k < len(choices):
-                    if choices[k] % a == 0:
-                        choices.pop(k)
-                    k += 1
-                turn += 1
-                i = 0
-            i += 1
-        if turn == 1:
-            ben_wins += 1
-        elif turn % 2 == 0:
-            ben_wins += 1
-        else:
-            maria_wins += 1
+    player_score = 0
+    for num in nums:
+        player_score += prime_flags[num] % 2 == 1
 
-    if maria_wins > ben_wins:
+    if player_score * 2 == len(nums):
+        return None
+    if player_score * 2 > len(nums):
         return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
-        return None
+    return "Ben"
